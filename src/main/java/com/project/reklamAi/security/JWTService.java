@@ -41,8 +41,6 @@ public class JWTService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) { //validate to if this token belongs the this userDetails
         final String username = extractUserName(token); //username is email here
-        System.out.println(userDetails.getUsername());
-        System.out.println(username);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 

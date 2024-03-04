@@ -1,23 +1,17 @@
-package com.project.reklamAi.entities;
+package com.project.reklamAi.business.responses;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 @Data
-@Document(collection = "adAnalysis")
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdAnalysis {
-    @Id
+public class GetAllByIdAdAnalysisResponse {
     private String id;
-
-    private String userIdentifier;
+    private String userId;
     private String copy;
     private String productType;
     private List<String> audience;

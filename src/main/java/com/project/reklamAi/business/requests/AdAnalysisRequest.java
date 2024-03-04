@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdAnalysisRequest {
-    private String userId;
+    private String userIdentifier;
     private String copy;
     private String productType;
     private List<String> audience;

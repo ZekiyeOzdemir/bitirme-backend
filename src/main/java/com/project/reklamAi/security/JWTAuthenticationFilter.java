@@ -41,7 +41,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
         if(userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName); //call UserDetailsService to check if we have the user already within our database
-            System.out.println("filter userDetails" + userDetails);
             if(jwtService.isTokenValid(jwt, userDetails)) { //if user valid we need to update SecurityContext and send the request to out dispatcher servlet part
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
