@@ -17,14 +17,17 @@ public class UserController {
     private UserService userService;
     @PutMapping("/{userId}")
     @CrossOrigin(origins = { "*" })
-    public ResponseEntity<?> updateUsername(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> updateUsername(@RequestBody UserRequest userRequest) {
         try{
             //userService.updateUsername(userRequest.getUserId(), userRequest.getNewUserName());
             //return ResponseEntity.ok(new UserResponse("Kullanıcı adı güncellendi"));
-            return ResponseEntity.ok(userService.updateUsername(userRequest.getUserId(), userRequest.getNewUserName()));
+            UserResponse userResponse = userService.updateUsername(userRequest.getUserId(), userRequest.getNewUserName());
+            return ResponseEntity.ok(userResponse);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new UserResponse("Kullanıcı adı güncellenemedi, hata oluştu"));
-        }
+            UserResponse errorResponse = UserResponse.builder()
+                    .message("Kullanıcı adı güncellenemedi, hata oluştu: " + e.getMessage())
+                    .build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);        }
     }
 
     @PutMapping("/email/{userId}")

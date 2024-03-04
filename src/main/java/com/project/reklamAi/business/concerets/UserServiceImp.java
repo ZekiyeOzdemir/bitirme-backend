@@ -2,6 +2,7 @@ package com.project.reklamAi.business.concerets;
 
 import com.project.reklamAi.business.abstracts.UserService;
 import com.project.reklamAi.business.responses.AuthenticationResponse;
+import com.project.reklamAi.business.responses.UserResponse;
 import com.project.reklamAi.dataAccess.UserRepository;
 import com.project.reklamAi.entities.Role;
 import com.project.reklamAi.entities.User;
@@ -25,22 +26,31 @@ public class UserServiceImp implements UserService {
     private  PasswordEncoder passwordEncoder;
 
     @Override
-    public AuthenticationResponse updateUsername(String userId, String newUsername) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı, ID: " + userId));
-        user.setUsername(newUsername);
-        userRepository.save(user);
-        User newUser = userRepository.findById(userId).orElseThrow();
+    public UserResponse updateUsername(String userId, String newUsername) {
+        try {
+            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı, ID: " + userId));
+            user.setUsername(newUsername);
+            userRepository.save(user);
+            User newUser = userRepository.findById(userId).orElseThrow();
 
-        var userTokenized = User.builder()
-                .id(newUser.getId())
-                .username(newUser.getUsername())
-                .email(newUser.getEmail())
-                .password(passwordEncoder.encode(newUser.getPassword()))
-                .uploadedAudios(newUser.getUploadedAudios())
-                .role(Role.USER)
-                .build();
-        var jwtToken =jwtService.generateToken(userTokenized);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+            var userTokenized = User.builder()
+                    .id(newUser.getId())
+                    .username(newUser.getUsername())
+                    .email(newUser.getEmail())
+                    .password(passwordEncoder.encode(newUser.getPassword()))
+                    .uploadedAudios(newUser.getUploadedAudios())
+                    .role(Role.USER)
+                    .build();
+            var jwtToken =jwtService.generateToken(userTokenized);
+            return UserResponse.builder()
+                    .token(jwtToken)
+                    .message("Güncellendi")
+                    .build();
+        } catch (Exception e) {
+            return UserResponse.builder()
+                    .message("Kullanıcı adı güncellenemedi, hata oluştu: " + e.getMessage())
+                    .build();
+        }
     }
 
     @Override
