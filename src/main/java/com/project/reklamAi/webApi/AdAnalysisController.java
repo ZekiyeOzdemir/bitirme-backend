@@ -14,6 +14,7 @@ public class AdAnalysisController {
     private AdAnalysisService adAnalysisService;
 
     @PostMapping
+    @CrossOrigin(origins = { "*" })
     @ResponseStatus(code = HttpStatus.CREATED)
     public AdAnalysisResponse createAnalysis(@RequestBody AdAnalysisRequest adAnalysisRequest) {
         return this.adAnalysisService.createAnalysis(adAnalysisRequest);
